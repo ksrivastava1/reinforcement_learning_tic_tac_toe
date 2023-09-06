@@ -1,9 +1,11 @@
 import numpy as np
+# from numba import jit
 from utils import *
 
 
 # Run this function to just play one training game to test all the training functions
 # in the utils.py file
+# @jit
 def train_example():
 
     #### HYPERPARAMETERS ####
@@ -91,14 +93,14 @@ def train_example():
 
 # Function for training the reinforcement learning agent
 # Run this function to train the agent over 100000 games
-
+# @ jit
 def train():
 
     #### HYPERPARAMETERS ####
 
     learn_rate = 0.6
     explore_rate = 0.6
-    num_games = 10000
+    num_games = 20000
 
     #### Initialize states and scores ####
 
@@ -117,7 +119,8 @@ def train():
 
     for i in range(num_games):
 
-        if i%200 == 0:
+        # Uncomment this line to print the game number every 1000 games
+        if i%1000 == 0:
             print("Game ", i)
 
         # Reset the game conditions for each game

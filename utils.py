@@ -1,10 +1,11 @@
 import numpy as np
+# from numba import jit
 
 ################ TIC TAC TOE RELATED FUNCTIONS ################
 
 # Defining a function to check the win state of the 3x3 board 
 # This will include a lot of manual conditions
-
+# @jit
 def is_win(board):
     
     if board[0,0] != 0:
@@ -35,7 +36,7 @@ def is_win(board):
         
 # This function just takes the backend board of integers and converts it to a slightly more traditional board
 # It's a bit janky right now but will update later
-
+# @jit
 def print_board(board):
     printed_board = np.array([["", "", ""], ["","", ""], ["", "", ""]], dtype = str)
     symbols = ['O', ' ', 'X']
@@ -46,7 +47,7 @@ def print_board(board):
     return printed_board
 
 # This function updates the board position according to the player number
-
+# @jit
 def update_board(board, pos, player):
     pos = pos-1
     moves = np.array([1,-1])
@@ -89,7 +90,7 @@ def player_input(board, player):
 ################ REINFORCEMENT LEARNING RELATED FUNCTIONS ################
 
 # Defining a function to add new scores for unseen states to the chart as well as the list of states themselves
-
+# @jit
 def add_score(states, scores, board):
 
     possible_scores = [0, 0.5, 1]
@@ -99,14 +100,14 @@ def add_score(states, scores, board):
     return states, scores
 
 # Defining a function to lookup scores. To-do: Implement a cleaner, list-comprehension version of this
-
+# @jit
 def lookup_score(states, scores, board):
     for i in range(states.shape[0]):
         if (states[i] == board).all():
             return scores[i]
 
 # Defining a function to update scores of a previous state given the current state after a move has been made
-
+# @jit
 def update_score(prev_board, cur_board, states, scores, learn_rate):
     for prev_index in range(states.shape[0]): 
         if (states[prev_index] == prev_board).all():
@@ -116,7 +117,7 @@ def update_score(prev_board, cur_board, states, scores, learn_rate):
                     return scores
                 
 # Defining a function to update final score of a previous state 
-
+# @jit
 def update_final_score(prev_board, states, scores, learn_rate, win_value):
     for prev_index in range(states.shape[0]): 
         if (states[prev_index] == prev_board).all():
@@ -125,7 +126,7 @@ def update_final_score(prev_board, states, scores, learn_rate, win_value):
         
 # Inefficient function to see if we have already seen a board state
 # Need to fix this with either list comprehension or hash table later
-
+# @jit
 def is_in(board, states):
     for known_state in states[:]:
         if (board == known_state).all():
@@ -136,7 +137,7 @@ def is_in(board, states):
 # We need to define a rule for generating a new move for the training phase of the model
 # We will pick moves based on the current state of the board and
 # the possible board states we can move to from there
-
+# @jit
 def train_move_gen(board, states, scores, player, explore_rate):
 
     valid_pos = np.array([], dtype= int)
@@ -235,7 +236,7 @@ def move_gen(states, scores, board, computer):
         return states, scores, min_pos
     
     # Define a function to see if the game has ended during the training phase
-
+# @jit
 def is_ended_train(board):
 
     state = is_win(board)
